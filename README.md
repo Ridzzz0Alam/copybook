@@ -1,4 +1,4 @@
-# Strata — Design Archive
+# CopyBook — Design Archive
 
 An open reference of motion, gradient and typographic specimens for people who build
 interfaces. Every specimen is documented, inspectable, and ready to lift into production code.
@@ -9,11 +9,11 @@ Built as a static single-page app: React 19, TypeScript, Tailwind CSS v4, Framer
 
 ## Contents
 
-| # | Section | Specimens |
-|---|---------|-----------|
-| 01 | Motion — hover, click, continuous, loading, text | 60 |
-| 02 | Gradients — mesh, aurora, neon, metallic, glass, organic, brand | 50 |
-| 03 | Typefaces — filed by classification, with import lines | 50 |
+| #   | Section                                                         | Specimens |
+| --- | --------------------------------------------------------------- | --------- |
+| 01  | Motion — hover, click, continuous, loading, text                | 60        |
+| 02  | Gradients — mesh, aurora, neon, metallic, glass, organic, brand | 50        |
+| 03  | Typefaces — filed by classification, with import lines          | 50        |
 
 ---
 
@@ -24,12 +24,12 @@ npm install     # or: npm ci
 npm run dev     # http://localhost:5173
 ```
 
-| Script | Does |
-|--------|------|
-| `npm run dev` | Vite dev server with HMR |
-| `npm run build` | Typecheck (`tsc -b`) then production build to `dist/` |
-| `npm run preview` | Serve the built `dist/` locally |
-| `npm run lint` | ESLint across the repo |
+| Script            | Does                                                  |
+| ----------------- | ----------------------------------------------------- |
+| `npm run dev`     | Vite dev server with HMR                              |
+| `npm run build`   | Typecheck (`tsc -b`) then production build to `dist/` |
+| `npm run preview` | Serve the built `dist/` locally                       |
+| `npm run lint`    | ESLint across the repo                                |
 
 Node 22 is pinned via `.nvmrc` and used by CI.
 
@@ -41,12 +41,12 @@ Tokens live in `src/index.css` under Tailwind v4's `@theme` block — there is n
 `tailwind.config.js`. Semantic colours are HSL triples; brand colours are flat hex.
 
 ```css
---color-ocean:      #3B82F6;   /* primary accent */
---color-ocean-deep: #1D4ED8;   /* pressed / darker-on-light */
---color-ocean-soft: #93C5FD;   /* tints, mid-tier badges */
---color-mist:       #E2E8F0;   /* neutral highlight */
---color-ink:        #0B1220;   /* navy-tinted, not neutral black */
---color-paper:      #F1F5F9;
+--color-ocean: #3b82f6; /* primary accent */
+--color-ocean-deep: #1d4ed8; /* pressed / darker-on-light */
+--color-ocean-soft: #93c5fd; /* tints, mid-tier badges */
+--color-mist: #e2e8f0; /* neutral highlight */
+--color-ink: #0b1220; /* navy-tinted, not neutral black */
+--color-paper: #f1f5f9;
 ```
 
 `--color-mist` is a near-white neutral, so it reads as a quiet highlight rather than a
