@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/mark.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0A111E" />
+    <meta name="description" content="Strata — an open reference archive of motion, gradient and typographic specimens for interface builders." />
+    <title>Strata — Design Archive</title>
+    <script>
+      // Applies the scheme before first paint so `dark:` utilities and the
+      // scrollbar are correct immediately. Dark is the fallback.
+      // Key must stay in sync with ThemeProvider's storageKey.
+      (function () {
+        var root = document.documentElement;
+        try {
+          var t = localStorage.getItem('strata-theme') || 'dark';
+          if (t === 'system') {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          root.classList.add(t);
+          root.style.colorScheme = t;
+        } catch (e) {
+          root.classList.add('dark');
+          root.style.colorScheme = 'dark';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

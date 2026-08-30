@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* Tailwind v4 needs this to opt out of prefers-color-scheme and follow the .dark class */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Type — editorial grotesque + serif accent, replacing the old geometric stack */
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Inter Tight", sans-serif;
+  --font-editorial: "Instrument Serif", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Semantic tokens */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-ring: hsl(var(--ring));
+
+  /* STRATA brand — deep ocean blue + mist neutral on navy ink */
+  --color-ocean: #3B82F6;
+  --color-ocean-deep: #1D4ED8;
+  --color-ocean-soft: #93C5FD;
+  --color-mist: #E2E8F0;
+  --color-mist-deep: #94A3B8;
+  --color-ink: #0B1220;
+  --color-ink-soft: #131C2E;
+  --color-paper: #F1F5F9;
+  --color-paper-warm: #E2E8F0;
+  --color-clay: #64748B;
+
+  /* Sharp by default — the old system was 0.75rem everywhere */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 2px;
+
+  --animate-rise: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-ticker: ticker 40s linear infinite;
+  --animate-blink: blink 1.2s steps(2, start) infinite;
+  --animate-sweep: sweep 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @keyframes sweep {
+    0% { transform: scaleX(0); transform-origin: left; }
+    45% { transform: scaleX(1); transform-origin: left; }
+    55% { transform: scaleX(1); transform-origin: right; }
+    100% { transform: scaleX(0); transform-origin: right; }
+  }
+}
+
+@layer base {
+  /* Dark is the DEFAULT — :root carries the dark scale */
+  :root {
+    --background: 220 49% 8%;
+    --foreground: 214 32% 91%;
+    --card: 220 42% 11%;
+    --card-foreground: 214 32% 91%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 220 49% 8%;
+    --secondary: 220 30% 16%;
+    --secondary-foreground: 214 32% 91%;
+    --muted: 220 30% 16%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 220 49% 8%;
+    --border: 220 25% 22%;
+    --ring: 217 91% 60%;
+  }
+
+  /* Light is the opt-in override */
+  .light {
+    --background: 210 40% 96%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --primary: 217 84% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 214 32% 93%;
+    --muted-foreground: 215 16% 42%;
+    --accent: 217 84% 51%;
+    --accent-foreground: 0 0% 100%;
+    --border: 214 25% 82%;
+    --ring: 217 84% 51%;
+  }
+}
+
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply font-sans antialiased min-h-screen relative;
+    font-feature-settings: "ss01", "cv05";
+  }
+  html { scroll-behavior: smooth; }
+  ::selection {
+    background-color: #3B82F6;
+    color: #F1F5F9;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  /* Editorial numbering used across every section header */
+  .rule-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground;
+  }
+
+  /* Hard offset shadow instead of the old soft glow */
+  .hard-shadow {
+    box-shadow: 4px 4px 0 0 hsl(var(--foreground));
+  }
+  .hard-shadow-accent {
+    box-shadow: 4px 4px 0 0 var(--color-ocean);
+  }
+  .hard-shadow-sm {
+    box-shadow: 2px 2px 0 0 hsl(var(--foreground));
+  }
+
+  .hover-nudge {
+    @apply transition-transform duration-200 ease-out;
+  }
+  .hover-nudge:hover { transform: translate(-2px, -2px); }
+
+  /* Blueprint ruling — replaces the honeycomb tile */
+  .rule-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+  .halftone {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.14) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+  .diagonal-hatch {
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(var(--foreground) / 0.07) 0px,
+      hsl(var(--foreground) / 0.07) 1px,
+      transparent 1px,
+      transparent 7px
+    );
+  }
+
+  .underline-sweep {
+    background-image: linear-gradient(var(--color-ocean), var(--color-ocean));
+    background-size: 0% 2px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .underline-sweep:hover { background-size: 100% 2px; }
+
+  .animate-ticker { animation: ticker 40s linear infinite; }
+  .animate-blink { animation: blink 1.2s steps(2, start) infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ticker, .animate-blink { animation: none; }
+  }
+}
