@@ -186,3 +186,19 @@
     .animate-ticker, .animate-blink { animation: none; }
   }
 }
+
+/* ---------------------------------------------------------------
+   Theme swap — instant, but taken behind a snapshot.
+   The view transition is kept purely to batch the swap: the browser
+   holds a still image while every specimen restyles, so the torn
+   half-repainted frame never reaches the screen. Cancelling the
+   default animations makes the transition finish on the next frame,
+   which is what makes the change read as instant.
+   Outside @layer on purpose: nothing else styles these pseudo
+   elements, and layering them only makes them easier to lose.
+   --------------------------------------------------------------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
