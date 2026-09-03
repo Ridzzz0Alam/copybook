@@ -98,4 +98,4 @@ Each gallery (`src/sections/*.tsx`) holds its specimens as a typed array — fin
 
 ## License
 
-MIT - see [LICENSE](./LICENSE). Use it, fork it, ship it.
+MIT - see [LICENCE.md](./LICENCE.md). Use it, fork it, ship it.
