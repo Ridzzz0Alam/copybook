@@ -1,4 +1,4 @@
-impimport { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef } from 'react';
 import { Copy, Check, Play, Code2, Sparkles, MousePointer2, MousePointerClick, Repeat, Loader2 } from 'lucide-react';
 import { SpecimenCard } from '../components/specimen-card';
