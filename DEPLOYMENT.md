@@ -1,11 +1,24 @@
 # Deployment guide
 
-Getting Strata from your machine to a live Vercel URL, with GitHub Actions running the
+Getting Copybook from your machine to a live Vercel URL, with GitHub Actions running the
 pipeline. Roughly 20 minutes end to end.
 
-The pipeline deploys through the **Vercel CLI**, not Vercel's Git integration. That means
-GitHub Actions is the single gate: nothing reaches production unless lint, typecheck and
-build all pass first. Step 7 turns off the built-in integration so you don't deploy twice.
+## How it ships today
+
+**Vercel's Git integration is the deployer.** It watches `main`, builds on Vercel, and
+publishes to https://copybook-nine.vercel.app. No secrets, no configuration.
+
+`.github/workflows/ci.yml` runs alongside it and holds two jobs:
+
+| Job | What it does |
+|-----|--------------|
+| `verify` | Lint, typecheck, build, upload `dist/` — runs on every push and PR |
+| `deploy` | **Inert by default.** Without the three Vercel secrets it writes "Deploy skipped" to the run summary and exits green |
+
+The `deploy` job is wired but switched off on purpose: with the Git integration live, a
+second deployer would ship every commit twice. Steps 3-7 below turn it on and hand the
+deploy to Actions — worth doing if you want lint and typecheck to *gate* production rather
+than just report on it. Skip them if the current setup is fine.
 
 ---
 
@@ -59,8 +72,8 @@ git push -u origin main
 `.gitignore` already excludes `node_modules`, `dist`, and `.vercel`. Confirm with
 `git status` before committing that none of those are staged.
 
-The workflow will fail on this first push — the Vercel secrets don't exist yet. Expected;
-Step 6 fixes it.
+The workflow passes on this first push: `verify` runs for real and `deploy` reports itself
+skipped. Nothing fails for want of a secret.
 
 ---
 
@@ -109,6 +122,8 @@ than through Actions logs.
 ---
 
 ## Step 6 — Add the repository secrets
+
+This is the step that arms the `deploy` job. Until all three exist it stays inert.
 
 In your GitHub repo: **Settings → Secrets and variables → Actions → New repository secret**.
 
@@ -159,16 +174,18 @@ Both jobs live in `.github/workflows/ci.yml`. They're in one file deliberately: 
 can only reference jobs in the *same* workflow, so splitting them across two files would
 silently drop the gate and let broken code deploy.
 
-| Trigger | Result |
-|---------|--------|
-| PR into `main` | Verify, then a **preview** deploy on a unique URL |
-| Push to `main` | Verify, then a **production** deploy |
-| Fork PR | Verify only — forks can't read secrets, so deploy is skipped by design |
+| Trigger | Secrets set | Result |
+|---------|-------------|--------|
+| PR into `main` | either | Verify only — `deploy` doesn't run on PRs |
+| Push to `main` | no | Verify, then `deploy` logs "skipped" and passes |
+| Push to `main` | yes | Verify, then a **production** deploy |
 
 Deploys use `vercel pull` → `vercel build` → `vercel deploy --prebuilt`. Building on the
 runner rather than on Vercel means the artifact you tested is the artifact that ships.
 
-`concurrency` cancels superseded runs, so rapid pushes won't race each other.
+`concurrency` cancels superseded runs, so rapid pushes won't race each other. **A run
+marked "cancelled" right after a second push is this working as intended, not a failure** —
+the older commit's run is dropped because a newer one supersedes it.
 
 ---
 
@@ -180,8 +197,17 @@ expired. Check the secret name character for character.
 **`Project not found`** — `VERCEL_ORG_ID` or `VERCEL_PROJECT_ID` doesn't match
 `.vercel/project.json`. Re-run `vercel link` and re-copy both.
 
-**Deploy job skipped on a PR** — expected for forks. Also check the verify job actually
-passed; `needs: verify` skips deploy on failure.
+**Deploy job says "skipped"** — expected until all three secrets are set. The job passes
+green; read the run summary for which one is missing. It also never runs on PRs, and
+`needs: verify` skips it whenever the quality gate fails.
+
+**A run shows "cancelled"** — `concurrency.cancel-in-progress` dropped it because you
+pushed again while it was running. The newer run is the one that counts.
+
+**Vercel deployment sits in "Building" for a long time** — queued on Vercel's side, not a
+repo problem. A build here takes roughly 4-5 minutes end to end; the commit status on
+GitHub stays yellow for that whole window. If it's still yellow well past that, open the
+build log from the commit's status link and look for a hung install step.
 
 **Build passes locally, fails in CI** — usually a case-sensitivity issue. macOS and
 Windows are case-insensitive; the Ubuntu runner is not. An import written as

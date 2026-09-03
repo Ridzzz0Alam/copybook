@@ -9,6 +9,9 @@
 ![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-0055FF?logo=framer&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
+[![CI](https://github.com/Ridzzz0Alam/copybook/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ridzzz0Alam/copybook/actions/workflows/ci.yml)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?logo=vercel&logoColor=white)](https://copybook-nine.vercel.app/)
+
 **An open reference archive of motion, gradient, and typography specimens for people who build interfaces.**
 
 Every specimen is documented, inspectable, and ready to copy straight into production code.
