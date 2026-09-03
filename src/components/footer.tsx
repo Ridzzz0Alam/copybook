@@ -30,7 +30,7 @@ export function Footer() {
             <div className="flex items-baseline gap-2.5">
               <span className="inline-block h-3.5 w-3.5 translate-y-px bg-ocean" />
               <span className="font-display text-2xl font-bold uppercase tracking-[-0.02em]">
-                Strata
+                Copybook
               </span>
             </div>
             <p className="mt-5 max-w-sm font-editorial text-xl leading-snug text-muted-foreground">
