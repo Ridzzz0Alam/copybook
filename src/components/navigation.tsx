@@ -1,4 +1,4 @@
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, Github } from "lucide-react";
 import { useTheme } from "../lib/use-theme";
 import { cn } from "../lib/utils";
 import {
@@ -69,6 +69,17 @@ export function Navigation() {
 
 
          <div className="flex items-center gap-2">
+           <a
+             href="https://github.com/Ridzzz0Alam/copybook"
+             target="_blank"
+             rel="noreferrer noopener"
+             aria-label="View the source on GitHub"
+             className="flex h-9 w-9 items-center justify-center border border-foreground/25 transition-colors hover:bg-foreground hover:text-background"
+           >
+             <Github className="h-4 w-4" />
+           </a>
+
+
            <button
              onClick={() =>
                setTheme(resolvedTheme === "dark" ? "light" : "dark")

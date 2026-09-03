@@ -13,7 +13,7 @@
 
 Every specimen is documented, inspectable, and ready to copy straight into production code.
 
-[Live demo](#) · [Report a bug](../../issues) · [Request a specimen](../../issues)
+[Live demo](https://copybook-nine.vercel.app/) · [Report a bug](../../issues)
 
 ![Copybook preview](./preview.png)
 
