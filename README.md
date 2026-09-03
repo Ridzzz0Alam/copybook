@@ -1,132 +1,101 @@
-# CopyBook — Design Archive
+<div align="center">
 
-An open reference of motion, gradient and typographic specimens for people who build
-interfaces. Every specimen is documented, inspectable, and ready to lift into production code.
+# Copybook
 
-Built as a static single-page app: React 19, TypeScript, Tailwind CSS v4, Framer Motion.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-0055FF?logo=framer&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+**An open reference archive of motion, gradient, and typography specimens for people who build interfaces.**
+
+Every specimen is documented, inspectable, and ready to copy straight into production code.
+
+[Live demo](#) · [Report a bug](../../issues) · [Request a specimen](../../issues)
+
+![Copybook preview](./preview.png)
+
+</div>
 
 ---
 
-## Contents
+## What's in here
 
-| #   | Section                                                         | Specimens |
-| --- | --------------------------------------------------------------- | --------- |
-| 01  | Motion — hover, click, continuous, loading, text                | 60        |
-| 02  | Gradients — mesh, aurora, neon, metallic, glass, organic, brand | 50        |
-| 03  | Typefaces — filed by classification, with import lines          | 50        |
+| #   | Section       | Specimens | What you get                                                                              |
+| --- | ------------- | :-------: | ----------------------------------------------------------------------------------------- |
+| 01  | **Motion**    |    60     | Hover, click, loading, and text effects — inspect each one, then copy its code            |
+| 02  | **Gradients** |    50     | Mesh, aurora, neon, metallic, glass, organic, and brand blends with the CSS behind each   |
+| 03  | **Typefaces** |    50     | Google Fonts filed by classification, previewed live, with the import line ready to paste |
 
----
+No sign-up, no build step to browse — open the site and copy what you need.
 
-## Quick start
+## Running it locally
+
+You'll need **Node 22+** (pinned in `.nvmrc`).
 
 ```bash
-npm install     # or: npm ci
-npm run dev     # http://localhost:5173
+git clone https://github.com/Ridzzz0Alam/copybook.git
+cd copybook
+npm install
+npm run dev
 ```
 
-| Script            | Does                                                  |
-| ----------------- | ----------------------------------------------------- |
-| `npm run dev`     | Vite dev server with HMR                              |
-| `npm run build`   | Typecheck (`tsc -b`) then production build to `dist/` |
-| `npm run preview` | Serve the built `dist/` locally                       |
-| `npm run lint`    | ESLint across the repo                                |
+Open **http://localhost:5173**.
 
-Node 22 is pinned via `.nvmrc` and used by CI.
+| Command           | What it does                                                 |
+| ----------------- | ------------------------------------------------------------ |
+| `npm run dev`     | Starts the dev server with hot reload                        |
+| `npm run build`   | Typechecks, then builds a production bundle to `dist/`       |
+| `npm run preview` | Serves the built `dist/` locally, as it'll run in production |
+| `npm run lint`    | Runs ESLint across the project                               |
 
----
+## Tech stack
 
-## Design system
+React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion
 
-Tokens live in `src/index.css` under Tailwind v4's `@theme` block — there is no
-`tailwind.config.js`. Semantic colours are HSL triples; brand colours are flat hex.
+It's a static single-page app — no backend, no database, no environment variables to configure.
 
-```css
---color-ocean: #3b82f6; /* primary accent */
---color-ocean-deep: #1d4ed8; /* pressed / darker-on-light */
---color-ocean-soft: #93c5fd; /* tints, mid-tier badges */
---color-mist: #e2e8f0; /* neutral highlight */
---color-ink: #0b1220; /* navy-tinted, not neutral black */
---color-paper: #f1f5f9;
-```
-
-`--color-mist` is a near-white neutral, so it reads as a quiet highlight rather than a
-second accent. Don't use it for anything that needs to pop on the light scheme — it
-disappears against `--background`. Reach for `--color-ocean` there instead.
-
-**Type.** Bricolage Grotesque (display), Inter Tight (body), Instrument Serif
-(editorial accents), JetBrains Mono (labels and code).
-
-**Shape.** Sharp by default — radius tokens are `0px`/`2px`. Depth comes from solid
-offset shadows (`.hard-shadow`) and hairline rules, not blur or glow.
-
-**Utilities.** `.rule-label` (monospace section labels), `.rule-grid` /
-`.halftone` / `.diagonal-hatch` (background textures), `.underline-sweep`,
-`.hover-nudge`. Ticker and blink animations respect `prefers-reduced-motion`.
-
-### Colour scheme
-
-**Dark is the default.** The dark scale lives on `:root`, and `.light` is the opt-in
-override — the inverse of the usual arrangement. Doing it this way means the correct
-colours are painted before JavaScript runs, so there's no white flash on first load.
-
-`ThemeProvider` still adds a literal `dark` or `light` class to `<html>`, so the `dark:`
-variant keeps working normally.
-
-Colour scheme is class-based, not media-query based. Tailwind v4 defaults the `dark:`
-variant to `prefers-color-scheme`, so the class strategy **requires** this line in
-`src/index.css`:
-
-```css
-@custom-variant dark (&:where(.dark, .dark *));
-```
-
-Remove it and every `dark:` utility silently stops responding to the toggle.
-
-To flip the default back to light, change `defaultTheme` in `src/App.tsx` — but also
-swap which scale sits on `:root` in `index.css`, or you'll reintroduce the flash.
-
----
-
-## Structure
+## Project structure
 
 ```
 src/
-├── components/
-│   ├── navigation.tsx        # fixed bar, mobile drawer, scheme toggle
-│   ├── footer.tsx
-│   ├── ticker.tsx            # looping marquee band
-│   ├── section-header.tsx    # shared numbered editorial header
-│   ├── specimen-card.tsx     # flat card frame used by all galleries
-│   ├── scroll-progress.tsx
-│   ├── theme-provider.tsx    # component only
-│   ├── magnetic-button.tsx
-│   └── text-reveal.tsx
-├── sections/
-│   ├── hero.tsx
-│   ├── animation-effects.tsx # lazy
-│   ├── gradient-gallery.tsx  # lazy
-│   └── font-showcase.tsx     # lazy
-├── lib/
-│   ├── theme-context.ts      # context + types
-│   ├── use-theme.ts          # hook
-│   └── utils.ts              # cn()
-├── index.css                 # all design tokens
+├── components/     # nav, footer, ticker, shared card/header, theme toggle
+├── sections/       # the three galleries (Motion, Gradients, Type) — each lazy-loaded
+├── lib/            # theme context/hook, small utilities
+├── index.css       # every design token lives here (see below)
 ├── App.tsx
 └── main.tsx
 ```
 
-The three gallery sections are `React.lazy` imports, so they ship as separate chunks
-behind a `Suspense` fallback.
+The three gallery sections are code-split with `React.lazy`, so visitors only download the section they scroll to.
 
----
+## Design system, in brief
 
-## Deployment
+All colours, fonts, radii, and animation tokens live in `src/index.css` under a Tailwind v4 `@theme` block — there's no separate `tailwind.config.js` to hunt through.
 
-CI and deployment run from `.github/workflows/ci.yml`. See **[DEPLOYMENT.md](./DEPLOYMENT.md)**
-for the full setup walkthrough.
+- **Dark mode is the default**, set with a class (not `prefers-color-scheme`), and painted before React mounts so there's no flash on load.
+- **Sharp corners, hard offset shadows, hairline rules** instead of blur or glow — that's the whole visual language in one sentence.
+- Fonts: Bricolage Grotesque (headings), Inter (body), Newsreader (editorial accents), JetBrains Mono (labels/code).
 
----
+If you're extending the palette or adding a specimen, `src/index.css` is the one file to read first.
 
-## Licence
+## Contributing
 
-MIT.
+Contributions are welcome — new specimens, bug fixes, accessibility improvements, or better docs.
+
+1. Fork the repo and create a branch off `main`
+2. Make your change
+3. Run `npm run lint && npm run build` locally — both must pass before you open a PR
+4. Open a pull request with a short description of what changed and why
+
+Every PR runs the same lint + typecheck + build check automatically via GitHub Actions. Green check required before merge.
+
+### Adding a specimen
+
+Each gallery (`src/sections/*.tsx`) holds its specimens as a typed array — find the existing entries, follow the same shape, and add yours alongside them. No new files or routing needed for a single addition.
+
+## License
+
+MIT - see [LICENSE](./LICENSE). Use it, fork it, ship it.
